@@ -1,5 +1,6 @@
 package com.ecomorce.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,22 +11,32 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "PRODUCT_CATEGORY")
-public class ProductCategory {
+public class ProductCategory implements Serializable{
 	
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	public ProductCategory() {
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long productCategoryId;
 	private String productCategoryName;
 	
-	@OneToMany(mappedBy = "productCategory" , cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ProductDetails> productDetails;
 	
 	
 	
-
 	public Long getProductCategoryId() {
 		return productCategoryId;
 	}

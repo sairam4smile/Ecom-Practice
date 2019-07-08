@@ -37,15 +37,18 @@ public class ProductService  implements IProductService{
 		if(!userDeatails.isPresent())
 			        throw new EcomorseException("inavlid user category");
 		
-		if(!(userDeatails.get().getRole()).equalsIgnoreCase((Role.SELLER.toString())))
+		if(!(userDeatails.get().getUserType()).equalsIgnoreCase((Role.SELLER.toString())))
 	        throw new EcomorseException("only seller can add the products ");
 		
 		
 		ProductDetails productDetails=new ProductDetails();
+		UserDeatails UserDeatail=new UserDeatails();
+		UserDeatail.setUserId(productDetailsDto.getUserId());
+		
 		ProductCategory productCategory=new ProductCategory();
 		productCategory.setProductCategoryId(productDetailsDto.getProductCategoryId());
 		productDetails.setPrice(productDetailsDto.getPrice());
-		productDetails.setUserId(productDetailsDto.getUserId());
+		productDetails.setUserDeatails(UserDeatail);
 		productDetails.setProductName(productDetailsDto.getProductName());
 		productDetails.setProductCategory(productCategory);
 
@@ -80,12 +83,13 @@ public class ProductService  implements IProductService{
 	public static List<ProductDetailsDto> productDetailsToDto(List<ProductDetails> productDetails) {
 		
 		List<ProductDetailsDto> productDetailsDtos =new ArrayList<>();
+
 		for(ProductDetails product: productDetails) {
 			ProductDetailsDto productDetailsDto=new ProductDetailsDto();
 			productDetailsDto.setPrice(product.getPrice());
 			productDetailsDto.setProductId(product.getProductId());
 			productDetailsDto.setProductName(product.getProductName());
-			productDetailsDto.setUserId(product.getUserId());
+//			productDetailsDto.setUserId(product.getUserId());
 			productDetailsDtos.add(productDetailsDto);
 			
 		}

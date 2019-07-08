@@ -12,6 +12,6 @@ public interface UserDeatailsRepository extends JpaRepository<UserDeatails, Long
 
 public List<UserDeatails> findByUserName(String userName);
 public List<UserDeatails> findByUserNameAndPassword(String userName, String password);
-public List<UserDeatails> findByRole(String role);
+public List<UserDeatails> findByUserType(String role);
 
 }

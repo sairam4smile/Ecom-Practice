@@ -56,7 +56,7 @@ public class TestUserService {
 		
 		userDeatails=new UserDeatails();
 		userDeatails.setPassword("1234");
-		userDeatails.setRole("BUYER");
+		userDeatails.setUserType("BUYER");
 		userDeatails.setUserId(1L);
 		userDeatails.setUserName("sairam");
 		
@@ -209,8 +209,8 @@ public class TestUserService {
 	  public void TestGetProfiles() {
 		  
 		  userDetailsList.add(userDeatails);
-	  Mockito.when(userDeatailsRepository.findByRole(userDeatails.getRole())).thenReturn(userDetailsList);
-	  ResponseEntity<List<UserDeatails>> actualvalue=customerService.getProfiles(userDeatails.getRole());
+	  Mockito.when(userDeatailsRepository.findByUserType(userDeatails.getUserType())).thenReturn(userDetailsList);
+	  ResponseEntity<List<UserDeatails>> actualvalue=customerService.getProfiles(userDeatails.getUserType());
 	  
 	  Assert.assertEquals(userDetailsList,actualvalue.getBody());
 	  

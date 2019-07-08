@@ -72,7 +72,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public  ResponseEntity<List<UserDeatails>> getProfiles(String role) {
-		return  new ResponseEntity<>(userDeatailsRepository.findByRole(role.toUpperCase()),HttpStatus.OK);
+		return  new ResponseEntity<>(userDeatailsRepository.findByUserType(role.toUpperCase()),HttpStatus.OK);
 	}
 	
 	
@@ -87,7 +87,7 @@ public class UserService implements IUserService {
 		
 		userDeatails.setUserId(userDeatailsDto.getUserId());
 		userDeatails.setPassword(userDeatailsDto.getPassword());
-		userDeatails.setRole(userDeatailsDto.getRole().toUpperCase());
+		userDeatails.setUserType(userDeatailsDto.getRole().toUpperCase());
 		userDeatails.setUserName(userDeatailsDto.getUserName());
 		return userDeatails;		
 		  
