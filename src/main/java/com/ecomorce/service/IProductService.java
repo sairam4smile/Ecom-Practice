@@ -11,7 +11,7 @@ public interface IProductService {
 	
 	public ResponseEntity<String> addProduct( ProductDetailsDto productDetailsDto);
 	public List<ProductDetails> getProducts();
-	public ResponseEntity<List<ProductDetailsDto>> getProductsByCategory(Long productCategoryId);
+	public ResponseEntity<List<ProductDetailsDto>> getProductsByCategory(String productCategoryName);
 	public ResponseEntity<List<ProductDetailsDto>> getProductsByName(String productCategoryName);
 
 

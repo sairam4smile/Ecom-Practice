@@ -3,7 +3,9 @@ package com.ecomorce.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +43,20 @@ public class ProductService  implements IProductService{
 	        throw new EcomorseException("only seller can add the products ");
 		
 		
-		ProductDetails productDetails=new ProductDetails();
-		UserDeatails UserDeatail=new UserDeatails();
-		UserDeatail.setUserId(productDetailsDto.getUserId());
 		
-		ProductCategory productCategory=new ProductCategory();
+		
+		ProductDetails productDetails=new ProductDetails();
+//		BeanUtils.copyProperties(productDetailsDto, productDetails);
+
+		
+		UserDeatails userDeatail=new UserDeatails();
+		userDeatail.setUserId(productDetailsDto.getUserId());
+		
+		
+		ProductCategory productCategory = new ProductCategory();
 		productCategory.setProductCategoryId(productDetailsDto.getProductCategoryId());
+		productDetails.setUserDeatails(userDeatail);		
 		productDetails.setPrice(productDetailsDto.getPrice());
-		productDetails.setUserDeatails(UserDeatail);
 		productDetails.setProductName(productDetailsDto.getProductName());
 		productDetails.setProductCategory(productCategory);
 
@@ -63,14 +71,24 @@ public class ProductService  implements IProductService{
 
 	
 	   @Override 
-	 public ResponseEntity<List<ProductDetailsDto>> getProductsByCategory(Long productCategoryId) { 
-		   Optional<ProductCategory> productCategory = productCategoryRepository.findById(productCategoryId);
-		 
-		   if(!productCategory.isPresent())
-			   throw new EcomorseException(productCategoryId+" is not present");
-	
-		        return  new ResponseEntity<>(productDetailsToDto(productCategory.get().getProductDetails()),HttpStatus.ACCEPTED);
-	  }
+	 public ResponseEntity<List<ProductDetailsDto>> getProductsByCategory(String productCategoryName) {
+		
+//		Optional<ProductCategory> productCategory = productCategoryRepository.findById(productCategoryId);
+		   List<ProductCategory> productCategorys = productCategoryRepository.findByProductCategoryName(productCategoryName);
+
+		if (productCategorys.isEmpty())
+			throw new EcomorseException(productCategoryName + " is not present");
+
+		/*
+		 * return new
+		 * ResponseEntity<>(productDetailsToDto(productCategory.get().getProductDetails(
+		 * )), HttpStatus.ACCEPTED);
+		 */
+	   
+	   
+		   
+		  return new  ResponseEntity<>(productDetailsToDto(productDetailsRepository.findAllProductsNative(productCategorys.get(0).getProductCategoryId())),HttpStatus.OK);
+	   }
 	 
 	@Override
 	public  ResponseEntity<List<ProductDetailsDto>> getProductsByName(String productCategoryName) {
@@ -80,7 +98,28 @@ public class ProductService  implements IProductService{
 	}
 
 	
-	public static List<ProductDetailsDto> productDetailsToDto(List<ProductDetails> productDetails) {
+	/*
+	 * public static List<ProductDetailsDto>
+	 * productDetailsToDto(List<ProductDetails> productDetails) {
+	 * 
+	 * List<ProductDetailsDto> productDetailsDtos =new ArrayList<>();
+	 * 
+	 * for(ProductDetails product: productDetails) { ProductDetailsDto
+	 * productDetailsDto=new ProductDetailsDto();
+	 * productDetailsDto.setPrice(product.getPrice());
+	 * productDetailsDto.setProductId(product.getProductId());
+	 * productDetailsDto.setProductName(product.getProductName()); //
+	 * productDetailsDto.setUserId(product.getUserId());
+	 * productDetailsDtos.add(productDetailsDto);
+	 * 
+	 * }
+	 * 
+	 * return productDetailsDtos;
+	 * 
+	 * }
+	 */
+	
+public static List<ProductDetailsDto> productDetailsToDto(Set<ProductDetails> productDetails) {
 		
 		List<ProductDetailsDto> productDetailsDtos =new ArrayList<>();
 
@@ -93,12 +132,9 @@ public class ProductService  implements IProductService{
 			productDetailsDtos.add(productDetailsDto);
 			
 		}
-	
 		return productDetailsDtos;
-		
-	}
 	
-	
+}
 	
 
 }

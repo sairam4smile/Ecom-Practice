@@ -2,6 +2,7 @@ package com.ecomorce.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,19 +22,13 @@ public class ProductCategory implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-
-
-
-	public ProductCategory() {
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long productCategoryId;
 	private String productCategoryName;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<ProductDetails> productDetails;
+	private Set<ProductDetails> productDetails;
 	
 	
 	
@@ -53,14 +48,25 @@ public class ProductCategory implements Serializable{
 		this.productCategoryName = productCategoryName;
 	}
 
-	public List<ProductDetails> getProductDetails() {
+	public Set<ProductDetails> getProductDetails() {
 		return productDetails;
 	}
 
-	public void setProductDetails(List<ProductDetails> productDetails) {
+	public void setProductDetails(Set<ProductDetails> productDetails) {
 		this.productDetails = productDetails;
 	}
+	
+	
 
+	/*
+	 * public List<ProductDetails> getProductDetails() { return productDetails; }
+	 * 
+	 * public void setProductDetails(List<ProductDetails> productDetails) {
+	 * this.productDetails = productDetails; }
+	 */
+
+	
+	
 	
 	
 	

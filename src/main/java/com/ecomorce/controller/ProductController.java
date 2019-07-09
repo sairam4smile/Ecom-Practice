@@ -40,10 +40,10 @@ public class ProductController {
 	 
 	
 	
-	@GetMapping("/products/category/{productCategoryId}/")
-	public ResponseEntity<List<ProductDetailsDto>> getProductByCategory(@PathVariable("productCategoryId") Long productCategoryId) {
+	@GetMapping("/products/category/{productCategory}/")
+	public ResponseEntity<List<ProductDetailsDto>> getProductByCategory(@PathVariable("productCategory") String productCategory) {
 		
-		return productService.getProductsByCategory(productCategoryId);
+		return productService.getProductsByCategory(productCategory);
 		
 	}
 	

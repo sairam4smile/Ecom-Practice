@@ -3,6 +3,7 @@ package com.ecomorce.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,28 +27,28 @@ import com.ecomorce.repository.UserDeatailsRepository;
 
 @RunWith(SpringRunner.class)
 public class TestProductService {
-	
+
 	ProductCategory productCategory;
 	ProductCategoryDto productCategoryDto;
-	
+
 	ProductDetails productDetails;
 	ProductDetailsDto productDetailsDto;
-	
+
 	UserDeatails userDeatails;
 	List<ProductDetails> productDetailsl;
+	Set<ProductDetails> productDetailss;
 
-	
-	@Mock ProductDetailsRepository productDetailsRepository;
-	@Mock ProductCategoryRepository productCategoryRepository;
-	
+	@Mock
+	ProductDetailsRepository productDetailsRepository;
+	@Mock
+	ProductCategoryRepository productCategoryRepository;
+
 	@InjectMocks
 	ProductService productService;
 
 	@Mock
 	UserDeatailsRepository userDeatailsRepository;
 
-	
-	
 	@Before
 	public void init() {
 		productCategoryDto = new ProductCategoryDto();
@@ -57,7 +58,7 @@ public class TestProductService {
 		productCategory = new ProductCategory();
 		productCategory.setProductCategoryId(3L);
 		productCategory.setProductCategoryName("SPORTS");
-		productCategory.setProductDetails(productDetailsl);
+		productCategory.setProductDetails(productDetailss);
 
 		productDetails = new ProductDetails();
 		productDetails.setPrice(100);
@@ -143,7 +144,7 @@ public class TestProductService {
 
 	@Test
 	public void TestGetProductsByCategory() {
-		productCategory.setProductDetails(productDetailsl);
+		productCategory.setProductDetails(productDetailss);
 
 		//
 		Mockito.when(productDetailsRepository.findById(productDetails.getProductId()))
@@ -151,7 +152,7 @@ public class TestProductService {
 		Mockito.when(productCategoryRepository.findById(productCategory.getProductCategoryId()))
 				.thenReturn(Optional.of(productCategory));
 		ResponseEntity<List<ProductDetailsDto>> actualvalue = productService
-				.getProductsByCategory(productCategory.getProductCategoryId());
+				.getProductsByCategory(productCategory.getProductCategoryName());
 		Assert.assertEquals(202, actualvalue.getStatusCodeValue());
 
 	}
@@ -162,7 +163,7 @@ public class TestProductService {
 		Mockito.when(productDetailsRepository.findById(productDetails.getProductId()))
 				.thenReturn(Optional.of(productDetails));
 		ResponseEntity<List<ProductDetailsDto>> actualvalue = productService
-				.getProductsByCategory(productDetails.getProductId());
+				.getProductsByCategory(productDetails.getProductCategory().getProductCategoryName());
 		Assert.assertEquals(200, actualvalue.getStatusCodeValue());
 
 	}
@@ -175,7 +176,7 @@ public class TestProductService {
 	public void TestGetProductsByName() {
 
 		Mockito.when(productDetailsRepository.findByProductName(productDetails.getProductName()))
-				.thenReturn(productDetailsl);
+				.thenReturn(productDetailss);
 		ResponseEntity<List<ProductDetailsDto>> actualvalue = productService
 				.getProductsByName(productDetails.getProductName());
 		Assert.assertEquals(200, actualvalue.getStatusCodeValue());
@@ -186,14 +187,12 @@ public class TestProductService {
 	public void TestGetProductsByNameException() {
 		productDetailsl = new ArrayList<>();
 
-		Mockito.when(productDetailsRepository.findByProductName("KKK")).thenReturn(productDetailsl);
+		Mockito.when(productDetailsRepository.findByProductName("KKK")).thenReturn(productDetailss);
 		ResponseEntity<List<ProductDetailsDto>> actualvalue = productService.getProductsByName("KKK");
 		Assert.assertEquals(productDetailsl.size(), actualvalue.getBody().size());
 
 	}
-	  
-	  /////// getProductsByName test cases end////
-	 
 
+	/////// getProductsByName test cases end////
 
 }
